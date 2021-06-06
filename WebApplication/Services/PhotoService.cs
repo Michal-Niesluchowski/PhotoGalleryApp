@@ -16,25 +16,23 @@ namespace WebApplication.Services
         public async  Task<Guid> AddPhotoAsync(PhotoItemViewModel photo)
         {
             PhotoWebApiClient apiClient = new PhotoWebApiClient(url, httpClient);
-
-            photo.OwnerId = "tempOwnerId";
-            photo.Tags = "tempTags";
-            photo.Title = "tempTitle";
-            photo.Description = "tempDescription";
-
             Guid returnValue = await apiClient.PhotoAsync(photo.ToDto());
-
             return returnValue; 
         }
 
         public async Task<PhotoItemViewModel[]> GetPhotosAsync()
-        {
+        { 
             PhotoWebApiClient apiClient = new PhotoWebApiClient(url, httpClient);
             var dtoPhotos = await apiClient.PhotoAllAsync("tempOwnerId");
             return dtoPhotos.Select(dto => PhotoItemViewModel.FromDto(dto)).ToArray();
         }
 
-        public async Task<bool> Mark
+        public async Task<bool> EditPhotoAsync(PhotoItemViewModel photo)
+        {
+            PhotoWebApiClient apiClient = new PhotoWebApiClient(url, httpClient);
+            await apiClient.Photo2Async(photo.Id, photo.ToDto());
+            return true;
+        }
     }
 }
  
