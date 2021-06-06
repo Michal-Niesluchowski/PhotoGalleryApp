@@ -1,19 +1,18 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.ComponentModel.DataAnnotations;
-using System.Text;
+using System.Linq;
+using System.Threading.Tasks;
 
-namespace PhotoGalleryBLL
+namespace WebApi.Models
 {
-    public class PhotoEntity
+    public class PhotoItemDTO
     {
         public Guid Id { get; set; }
 
-        [Required]
         public string Title { get; set; }
-        
+
         public string Description { get; set; }
-        
+
         public string Tags { get; set; }
 
         public string OwnerId { get; set; }
