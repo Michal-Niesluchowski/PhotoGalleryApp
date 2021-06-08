@@ -6,6 +6,8 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using WebApi.Models;
+using WebApi.Azure;
+using Microsoft.Extensions.Configuration;
 
 namespace WebApi.Controllers
 {
@@ -15,10 +17,12 @@ namespace WebApi.Controllers
     public class PhotoController : ControllerBase
     {
         private DatabaseContext _dbContext;
+        private IConfiguration _configuration;
 
-        public PhotoController(DatabaseContext dbContext)
+        public PhotoController(DatabaseContext dbContext, IConfiguration configuration)
         {
             this._dbContext = dbContext;
+            this._configuration = configuration;
         }
 
         [HttpGet("{ownerId}")]
@@ -35,18 +39,26 @@ namespace WebApi.Controllers
         }
 
         [HttpPost]
-        public ActionResult<Guid> Post([FromBody] PhotoItemDTO value)
+        public ActionResult<Guid> Post([FromBody] PhotoItemDTO photo)
         {
+            //Add image to blob
             Guid id = Guid.NewGuid();
-            _dbContext.PhotoEntities.Add(new PhotoEntity
+            BlobStorage blobStorage = new BlobStorage(_configuration);
+            string fileExtension = blobStorage.AddImmageToBlob(photo.FilePath, id);
+
+            //Create new photo entity
+            PhotoEntity newPhoto = new PhotoEntity
             {
                 Id = id,
-                Title = value.Title,
-                Description = value.Description,
-                Tags = value.Tags,
-                OwnerId = value.OwnerId
-            });
+                Title = photo.Title,
+                Description = photo.Description,
+                Tags = photo.Tags,
+                OwnerId = photo.OwnerId,
+                FileExtension = fileExtension
+            };
 
+            //Save new photo to db
+            _dbContext.PhotoEntities.Add(newPhoto);
             _dbContext.SaveChanges();
 
             return id;

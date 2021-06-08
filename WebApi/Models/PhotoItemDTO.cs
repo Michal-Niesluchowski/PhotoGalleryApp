@@ -16,5 +16,7 @@ namespace WebApi.Models
         public string Tags { get; set; }
 
         public string OwnerId { get; set; }
+
+        public string FilePath { get; set; }
     }
 }

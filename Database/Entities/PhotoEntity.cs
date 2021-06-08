@@ -17,5 +17,7 @@ namespace PhotoGalleryBLL
         public string Tags { get; set; }
 
         public string OwnerId { get; set; }
+
+        public string FileExtension { get; set; }
     }
 }
