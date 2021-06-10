@@ -10,7 +10,6 @@ using System.Linq;
 using System.Threading.Tasks;
 using WebApi;
 
-
 namespace WebApi.Azure
 {
     public class BlobStorage
@@ -23,7 +22,7 @@ namespace WebApi.Azure
             _configuration = configuration;
         }
         
-        public string AddImmageToBlob(string filePath, Guid fileId)
+        public string SaveImage(string filePath, Guid fileId)
         {
             string connectionString = _configuration.GetConnectionString("StorageConnectionString");
 

@@ -44,7 +44,7 @@ namespace WebApi.Controllers
             //Add image to blob
             Guid id = Guid.NewGuid();
             BlobStorage blobStorage = new BlobStorage(_configuration);
-            string fileExtension = blobStorage.AddImmageToBlob(photo.FilePath, id);
+            string fileExtension = blobStorage.SaveImage(photo.FilePath, id);
 
             //Create new photo entity
             PhotoEntity newPhoto = new PhotoEntity
