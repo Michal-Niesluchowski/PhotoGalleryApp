@@ -1,16 +1,15 @@
 ﻿using Microsoft.AspNetCore.Http;
 using System;
 using System.Collections.Generic;
-using System.ComponentModel;
+using System.ComponentModel.DataAnnotations;
 using System.Linq;
 using System.Threading.Tasks;
 
 namespace WebApi.Models
 {
-    public class PhotoItemDTO
+    public class PhotoForm
     {
-        public Guid Id { get; set; }
-
+        [Required]
         public string Title { get; set; }
 
         public string Description { get; set; }
@@ -19,6 +18,7 @@ namespace WebApi.Models
 
         public string OwnerId { get; set; }
 
-        public string FileExtension { get; set; }
+        [Required]
+        public IFormFile PhotoFile { get; set; }
     }
 }

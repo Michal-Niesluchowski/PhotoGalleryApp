@@ -8,6 +8,8 @@ using System.Threading.Tasks;
 using WebApi.Models;
 using WebApi.Azure;
 using Microsoft.Extensions.Configuration;
+using Microsoft.AspNetCore.Http;
+using System.IO;
 
 namespace WebApi.Controllers
 {
@@ -39,12 +41,12 @@ namespace WebApi.Controllers
         }
 
         [HttpPost]
-        public ActionResult<Guid> Post([FromBody] PhotoItemDTO photo)
+        public ActionResult<Guid> Post([FromForm] PhotoForm photo)
         {
             //Add image to blob
             Guid id = Guid.NewGuid();
-            BlobStorage blobStorage = new BlobStorage(_configuration);
-            string fileExtension = blobStorage.SaveImage(photo.FilePath, id);
+            BlobHandler blobHandler = new BlobHandler(_configuration);
+            blobHandler.SavePhoto(id, photo.PhotoFile);
 
             //Create new photo entity
             PhotoEntity newPhoto = new PhotoEntity
@@ -54,7 +56,7 @@ namespace WebApi.Controllers
                 Description = photo.Description,
                 Tags = photo.Tags,
                 OwnerId = photo.OwnerId,
-                FileExtension = fileExtension
+                FileExtension = Path.GetExtension(photo.PhotoFile.FileName)
             };
 
             //Save new photo to db
