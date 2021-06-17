@@ -1,12 +1,12 @@
 ﻿using System;
 using System.ComponentModel.DataAnnotations;
-using WebApplication.Services;
 
 namespace WebApplication.Models
 {
     public class PhotoItemViewModel
     {
         public Guid Id { get; set; }
+
         [Required]
         public string Title { get; set; }
 
@@ -16,14 +16,8 @@ namespace WebApplication.Models
 
         public string OwnerId { get; set; }
 
-        internal PhotoItemDTO ToDto()
-        {
-            throw new NotImplementedException();
-        }
+        public string FileExtension { get; set; }
 
-        internal static PhotoItemViewModel FromDto(PhotoItemDTO dto)
-        {
-            throw new NotImplementedException();
-        }
+        public 
     }
 }

@@ -1,4 +1,6 @@
-﻿using Azure.Storage.Blobs;
+﻿//When time left convert to singleton class
+
+using Azure.Storage.Blobs;
 using Azure.Storage.Blobs.Models;
 using Microsoft.AspNetCore.Http;
 using Microsoft.Extensions.Configuration;
@@ -19,7 +21,7 @@ namespace WebApi.Azure
         private IConfiguration _configuration;
         private readonly string CONTAINER_NAME = "photogallery";
         private readonly string FOLDER_NAME = "images";
-
+        
         public BlobHandler(IConfiguration configuration)
         {
             _configuration = configuration;
@@ -44,6 +46,20 @@ namespace WebApi.Azure
                 blobClient.Upload(ms);
             }
             Debug.WriteLine(blobClient.Uri);
+        }
+
+        public MemoryStream DownloadPhoto(Guid photoId, string fileExtension)
+        {
+            string connectionString = _configuration.GetConnectionString("StorageConnectionString");
+            BlobContainerClient blobContainerClient = new BlobContainerClient(connectionString, CONTAINER_NAME);
+            string blobPath = FOLDER_NAME + "/" + photoId.ToString() + fileExtension;
+            BlobClient blobClient = blobContainerClient.GetBlobClient(blobPath);
+
+            MemoryStream result = new MemoryStream();
+            blobClient.DownloadTo(result);
+            //string bloblPath = 
+
+            return null;
         }
     }
 }

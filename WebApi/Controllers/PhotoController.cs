@@ -30,13 +30,16 @@ namespace WebApi.Controllers
         [HttpGet("{ownerId}")]
         public ActionResult<IEnumerable<PhotoItemDTO>> Get(string ownerId)
         {
+            //Prepare blob handler
+            BlobHandler blobHandler = new BlobHandler(_configuration);
+
+            //Get photos from database and Azure
             return _dbContext.PhotoEntities.Where(item => item.OwnerId == ownerId).Select(e => new PhotoItemDTO
             {
                 Id = e.Id,
                 Title = e.Title,
                 Description = e.Description,
-                Tags = e.Tags,
-                
+                Tags = e.Tags
             }).ToList();
         }
 
