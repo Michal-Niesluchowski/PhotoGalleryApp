@@ -11,21 +11,26 @@
     <table class="table table-hover">
         <thead>
             <tr>
-                <td>Photo</td>
+                <td>Miniature</td>
                 <td>Title</td>
                 <td>Description</td>
                 <td>Tags</td>
             </tr>
         </thead>
 
-        @foreach (var item in Model.Photos)
+        @foreach (var photo in Model.Photos)
 	    {
 		    <tr>
-                <td>@item.Photo</td>
-                <td>@item.Title</td>
+                <td>@photo.UrlToThumbnail</td>
+                <td>@photo.Title</td>
+                <td>@photo.Description</td>
+                <td>@photo.Tags</td>
             </tr>
 	    }
 
     </table>
+    <div class="panel-footer add-item-form">
+        @await Html.PartialAsync("_AddPhotoPartial", new PhotoItemViewModel()) 
+    </div>
 
 </div>

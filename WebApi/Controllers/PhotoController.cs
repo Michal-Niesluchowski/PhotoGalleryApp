@@ -33,18 +33,22 @@ namespace WebApi.Controllers
             //Prepare blob handler
             BlobHandler blobHandler = new BlobHandler(_configuration);
 
-            //Get photos from database and Azure
+            //Get photos from database and blobs
             return _dbContext.PhotoEntities.Where(item => item.OwnerId == ownerId).Select(e => new PhotoItemDTO
             {
                 Id = e.Id,
                 Title = e.Title,
                 Description = e.Description,
-                Tags = e.Tags
+                Tags = e.Tags,
+                FileExtension = e.FileExtension,
+                OwnerId = e.OwnerId,
+                UrlToImage = blobHandler.GetUrlToImage(e.Id, e.FileExtension),
+                UrlToThumbnail = blobHandler.GetUrlToThumbnail(e.Id, e.FileExtension)
             }).ToList();
         }
 
         [HttpPost]
-        public ActionResult<Guid> Post([FromForm] PhotoForm photo)
+        public ActionResult<Guid> Post([FromForm] PhotoItemDTO photo)
         {
             //Add image to blob
             Guid id = Guid.NewGuid();

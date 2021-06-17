@@ -1,4 +1,4 @@
-﻿//When time left convert to singleton class
+﻿//Refactor opportunity - convert to singleton class
 
 using Azure.Storage.Blobs;
 using Azure.Storage.Blobs.Models;
@@ -20,22 +20,26 @@ namespace WebApi.Azure
     {
         private IConfiguration _configuration;
         private readonly string CONTAINER_NAME = "photogallery";
-        private readonly string FOLDER_NAME = "images";
-        
+        private readonly string FOLDER_NAME_IMAGES = "images";
+        private readonly string FOLDER_NAME_THUMBNAILS = "thumbnails";
+        private string _connectionString;
+        private string _azureAddress;
+
         public BlobHandler(IConfiguration configuration)
         {
             _configuration = configuration;
+            _connectionString = _configuration.GetConnectionString("StorageConnectionString");
+            _azureAddress = _configuration.GetConnectionString("AzureAddress"); 
         }
         
         public void SavePhoto(Guid photoId, IFormFile photoFile)
         {
             // Access containter
-            string connectionString = _configuration.GetConnectionString("StorageConnectionString");
-            BlobContainerClient blobContainerClient = new BlobContainerClient(connectionString, CONTAINER_NAME);
+            BlobContainerClient blobContainerClient = new BlobContainerClient(_connectionString, CONTAINER_NAME);
             blobContainerClient.CreateIfNotExists(PublicAccessType.Blob);
 
             // Create blob
-            string blobPath = FOLDER_NAME + "/" + photoId.ToString() + Path.GetExtension(photoFile.FileName);
+            string blobPath = FOLDER_NAME_IMAGES + "/" + photoId.ToString() + Path.GetExtension(photoFile.FileName);
             BlobClient blobClient = blobContainerClient.GetBlobClient(blobPath);
 
             //Save photo in blob
@@ -45,21 +49,22 @@ namespace WebApi.Azure
                 ms.Position = 0;
                 blobClient.Upload(ms);
             }
-            Debug.WriteLine(blobClient.Uri);
         }
 
-        public MemoryStream DownloadPhoto(Guid photoId, string fileExtension)
+        public string GetUrlToImage(Guid photoId, string fileExtension)
         {
-            string connectionString = _configuration.GetConnectionString("StorageConnectionString");
-            BlobContainerClient blobContainerClient = new BlobContainerClient(connectionString, CONTAINER_NAME);
-            string blobPath = FOLDER_NAME + "/" + photoId.ToString() + fileExtension;
-            BlobClient blobClient = blobContainerClient.GetBlobClient(blobPath);
+            return _azureAddress
+                + "/" + CONTAINER_NAME
+                + "/" + FOLDER_NAME_IMAGES 
+                + "/" + photoId.ToString() + fileExtension;
+        }
 
-            MemoryStream result = new MemoryStream();
-            blobClient.DownloadTo(result);
-            //string bloblPath = 
-
-            return null;
+        public string GetUrlToThumbnail(Guid photoId, string fileExtension)
+        {
+            return _azureAddress
+                + "/" + CONTAINER_NAME
+                + "/" + FOLDER_NAME_THUMBNAILS
+                + "/" + photoId.ToString() + fileExtension;
         }
     }
 }
