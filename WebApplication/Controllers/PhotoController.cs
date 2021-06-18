@@ -3,6 +3,7 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using WebApplication.Models;
 
 namespace WebApplication.Controllers
 {
@@ -10,7 +11,7 @@ namespace WebApplication.Controllers
     {
         public IActionResult Index()
         {
-            return View();
+            return View(new PhotoViewModel());
         }
     }
 }

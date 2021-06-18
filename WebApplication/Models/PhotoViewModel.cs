@@ -7,5 +7,10 @@ namespace WebApplication.Models
     public class PhotoViewModel
     {
         public PhotoItemViewModel[] Photos { get; set; }
+
+        public PhotoViewModel()
+        {
+            Photos = new PhotoItemViewModel[0];
+        }
     }
 }

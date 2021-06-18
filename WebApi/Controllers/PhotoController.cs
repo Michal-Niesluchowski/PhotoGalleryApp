@@ -14,7 +14,6 @@ using System.IO;
 namespace WebApi.Controllers
 {
     [Route("api/[controller]")]
-    [Produces("application/json")]
     [ApiController]
     public class PhotoController : ControllerBase
     {
@@ -28,13 +27,13 @@ namespace WebApi.Controllers
         }
 
         [HttpGet("{ownerId}")]
-        public ActionResult<IEnumerable<PhotoItemDTO>> Get(string ownerId)
+        public ActionResult<IEnumerable<PhotoItemDto>> Get(string ownerId)
         {
             //Prepare blob handler
             BlobHandler blobHandler = new BlobHandler(_configuration);
 
             //Get photos from database and blobs
-            return _dbContext.PhotoEntities.Where(item => item.OwnerId == ownerId).Select(e => new PhotoItemDTO
+            return _dbContext.PhotoEntities.Where(item => item.OwnerId == ownerId).Select(e => new PhotoItemDto
             {
                 Id = e.Id,
                 Title = e.Title,
@@ -48,7 +47,7 @@ namespace WebApi.Controllers
         }
 
         [HttpPost]
-        public ActionResult<Guid> Post([FromForm] PhotoItemDTO photo)
+        public ActionResult<Guid> Post([FromForm] PhotoItemDto photo)
         {
             //Add image to blob
             Guid id = Guid.NewGuid();
@@ -74,7 +73,7 @@ namespace WebApi.Controllers
         }
 
         [HttpPut("{id}")]
-        public void Put(Guid id, [FromBody] PhotoItemDTO value)
+        public void Put(Guid id, [FromBody] PhotoItemDto value)
         {
             var entity = _dbContext.PhotoEntities.SingleOrDefault(e => e.Id == id);
 

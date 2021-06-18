@@ -3,8 +3,6 @@
 <form asp-action="AddPhoto" method="post">
     <label asp-for="Title">Add new photo:</label>
     <input asp-for="PhotoFile"/>
-    <input asp-for="Title"/>
-    <input asp-for="Description"/>
-    <input asp-for="Tags"/>
+    <input asp-for="Title" value="Photo title"/>
     <button type="submit">Add</button>
 </form>
