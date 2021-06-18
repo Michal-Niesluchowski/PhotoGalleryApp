@@ -71,19 +71,5 @@ namespace WebApi.Controllers
 
             return id;
         }
-
-        [HttpPut("{id}")]
-        public void Put(Guid id, [FromBody] PhotoItemDto value)
-        {
-            var entity = _dbContext.PhotoEntities.SingleOrDefault(e => e.Id == id);
-
-            if (entity != null)
-            {
-                entity.Tags = value.Tags;
-                entity.Title = value.Title;
-                entity.Description = value.Description;
-                _dbContext.SaveChanges();
-            }
-        }
     }
 }
