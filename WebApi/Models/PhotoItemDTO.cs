@@ -35,7 +35,6 @@ namespace WebApi.Models
 
         public string UrlToThumbnail { get; set; }
 
-        [Required]
         public IFormFile PhotoFile { get; set; }
     }
 }

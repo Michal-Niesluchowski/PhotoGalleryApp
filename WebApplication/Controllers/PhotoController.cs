@@ -17,10 +17,9 @@ namespace WebApplication.Controllers
             _photoService = photoService;
         }
         
-        [ValidateAntiForgeryToken]
         public async Task<IActionResult> Index()
         {
-            var photos = await _photoService.GetPhotosAsync("");
+            var photos = await _photoService.GetPhotosAsync();
 
             var model = new PhotoViewModel
             {

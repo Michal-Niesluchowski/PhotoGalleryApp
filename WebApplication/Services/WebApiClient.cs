@@ -395,8 +395,7 @@ namespace WebApplication.Services
         [Newtonsoft.Json.JsonProperty("urlToThumbnail", Required = Newtonsoft.Json.Required.Default, NullValueHandling = Newtonsoft.Json.NullValueHandling.Ignore)]
         public string UrlToThumbnail { get; set; }
 
-        [Newtonsoft.Json.JsonProperty("photoFile", Required = Newtonsoft.Json.Required.Always)]
-        [System.ComponentModel.DataAnnotations.Required(AllowEmptyStrings = true)]
+        [Newtonsoft.Json.JsonProperty("photoFile", Required = Newtonsoft.Json.Required.Default, NullValueHandling = Newtonsoft.Json.NullValueHandling.Ignore)]
         public byte[] PhotoFile { get; set; }
 
 
