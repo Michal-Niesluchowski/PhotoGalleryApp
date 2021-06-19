@@ -1,36 +1,71 @@
-﻿@model PhotoViewModel
+﻿@*Bootstrap v4.3.1 (https://getbootstrap.com/)*@
 
-@{ 
+@model PhotoViewModel
+
+@{
     ViewData["Title"] = "My photo gallery";
-} 
+}
 
-<div class="panel panel-default photo-panel">
-    
-    <div class="panel-heading">@ViewData["Title"]</div>
+<h2 class="text-center">My photo gallery</h2>
+<br />
 
-    <table class="table table-hover">
-        <thead>
-            <tr>
-                <td>Photo</td>
-                <td>Title</td>
-                <td>Description</td>
-                <td>Tags</td>
-            </tr>
-        </thead>
 
-        @foreach (var photo in Model.Photos)
-	    {
-		    <tr>
-                <td>@photo.UrlToThumbnail</td>
-                <td>@photo.Title</td>
-                <td>@photo.Description</td>
-                <td>@photo.Tags</td>
-            </tr>
-	    }
+@foreach (var photo in Model.Photos)
+{
+    <a href="@photo.UrlToImage" target="_blank" >
+        <img src="@photo.UrlToThumbnail" alt="" class="img-thumbnail">
+    </a>
+}
 
-    </table>
-    <div class="panel-footer add-photo-form">
-        @await Html.PartialAsync("_AddPhotoPartial", new PhotoItemViewModel()) 
-    </div>
-
+<br />
+<br />
+<div class="panel-footer add-photo-form">
+    @await Html.PartialAsync("_AddPhotoPartial", new PhotoItemViewModel())
 </div>
+
+        @*<img src="..." alt="..." class="img-thumbnail">*@
+
+
+        @*<div class="container">
+                <div class="row">
+                    <div class="col-sm">
+                        One of three columns
+                    </div>
+                    <div class="col-sm">
+                        One of three columns
+                    </div>
+                    <div class="col-sm">
+                        One of three columns
+                    </div>
+                </div>
+            </div>*@
+
+        @*<div class="panel panel-default photo-panel">
+
+                <div class="panel-heading">@ViewData["Title"]</div>
+
+                <table class="table table-hover">
+                    <thead>
+                        <tr>
+                            <td>Photo</td>
+                            <td>Title</td>
+                            <td>Description</td>
+                            <td>Tags</td>
+                        </tr>
+                    </thead>
+
+                    @foreach (var photo in Model.Photos)
+                    {
+                        <tr>
+                            <td><img src="@photo.UrlToThumbnail" alt="" class="img-thumbnail"></td>
+                            <td>@photo.Title</td>
+                            <td>@photo.Description</td>
+                            <td>@photo.Tags</td>
+                        </tr>
+                    }
+
+                </table>
+                <div class="panel-footer add-photo-form">
+                    @await Html.PartialAsync("_AddPhotoPartial", new PhotoItemViewModel())
+                </div>
+            </div>*@
