@@ -2,7 +2,9 @@
 
 <form asp-action="AddPhoto" method="post">
     <label asp-for="Title">Add new photo:</label>
-    <input asp-for="PhotoFile"/>
-    <input asp-for="Title" value="Photo title"/>
+    <input asp-for="PhotoFile" />
+    <input asp-for="Title" value="Your photo title" />
+    <input asp-for="Description" value="Your photo description" />
+    <input asp-for="Tags" value="Your photo tags" />
     <button type="submit">Add</button>
 </form>

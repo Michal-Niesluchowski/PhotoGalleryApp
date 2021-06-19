@@ -32,9 +32,21 @@ namespace WebApplication.Models
         [Required]
         public IFormFile PhotoFile { get; set; }
 
-        internal static PhotoItemDto ToDto()
+        internal static PhotoItemViewModel FromDto(PhotoItemDto dto)
         {
-            throw new NotImplementedException();
+            PhotoItemViewModel result = new PhotoItemViewModel
+            {
+                Id = dto.Id,
+                Title = dto.Title,
+                Description = dto.Description,
+                Tags = dto.Tags,
+                OwnerId = dto.OwnerId,
+                FileExtension = dto.FileExtension,
+                UrlToImage = dto.UrlToImage,
+                UrlToThumbnail = dto.UrlToThumbnail
+            };
+
+            return result;
         }
     }
 }

@@ -8,7 +8,7 @@ using WebApplication.Models;
 
 namespace WebApplication.Services
 {
-    public class PhotoService
+    public class PhotoService : IPhotoService
     {
         private string url = "http://localhost:37422";
 
@@ -34,6 +34,17 @@ namespace WebApplication.Services
                 photo.OwnerId, photo.FileExtension, photo.UrlToImage, photo.UrlToThumbnail, fileParameterPhoto);
 
             return result;
+        }
+
+        public async Task<PhotoItemViewModel[]> GetPhotosAsync(string ownerId)
+        {
+            ownerId = "MN"; //improve when implementing authentication
+
+            PhotoWebApiClient apiClient = new PhotoWebApiClient(url, httpClient);
+
+            IEnumerable<PhotoItemDto> photosDto = await apiClient.PhotoAllAsync(ownerId);
+
+            return photosDto.Select(dto => PhotoItemViewModel.FromDto(dto)).ToArray();
         }
     }
 }
