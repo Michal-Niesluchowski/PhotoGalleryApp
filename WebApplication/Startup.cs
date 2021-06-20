@@ -1,5 +1,9 @@
+using AuthDatabase;
+using AuthDatabase.Entities;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
+using Microsoft.AspNetCore.Identity;
+using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
@@ -23,8 +27,25 @@ namespace WebApplication
         // This method gets called by the runtime. Use this method to add services to the container.
         public void ConfigureServices(IServiceCollection services)
         {
+            services.AddDbContext<AuthDatabaseContext>(opt => 
+                opt.UseSqlServer(Configuration.GetConnectionString("DefaultConnection"),
+                b => b.MigrationsAssembly("AuthDatabase")));
+
+            services.AddIdentity<AppUser, IdentityRole>()
+                .AddEntityFrameworkStores<AuthDatabaseContext>()
+                .AddDefaultTokenProviders();
+
+            services.Configure<CookiePolicyOptions>(opt =>
+            {
+                opt.CheckConsentNeeded = ctx => true;
+                opt.MinimumSameSitePolicy = Microsoft.AspNetCore.Http.SameSiteMode.None;
+
+            });
+
             services.AddTransient<IPhotoService, PhotoService>();
-            
+
+            services.AddAuthentication();
+
             services.AddControllersWithViews();
         }
 
@@ -44,6 +65,9 @@ namespace WebApplication
             app.UseRouting();
 
             app.UseAuthorization();
+            app.UseAuthentication();
+
+            app.UseCookiePolicy();
 
             app.UseEndpoints(endpoints =>
             {

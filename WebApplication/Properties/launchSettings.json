@@ -11,7 +11,7 @@
     "IIS Express": {
       "commandName": "IISExpress",
       "launchBrowser": true,
-      "launchUrl": "http://localhost:37422/Photo",
+      "launchUrl": "http://localhost:37422/Home",
       "environmentVariables": {
         "ASPNETCORE_ENVIRONMENT": "Development"
       }
