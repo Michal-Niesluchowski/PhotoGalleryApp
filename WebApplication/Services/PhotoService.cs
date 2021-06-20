@@ -25,7 +25,7 @@ namespace WebApplication.Services
             using (var ms = new MemoryStream())
             {
                 photo.PhotoFile.CopyTo(ms);
-                ms.Position = 0;
+                ms.Seek(0, SeekOrigin.Begin);
                 FileParameter fileParameterPhoto = new FileParameter(ms, photo.PhotoFile.FileName, "image/jpeg");
                 result = await apiClient.PhotoAsync(photo.Id, photo.Title, photo.Description, photo.Tags,
                 photo.OwnerId, "", "", "", fileParameterPhoto);

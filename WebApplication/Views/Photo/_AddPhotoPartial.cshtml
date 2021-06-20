@@ -1,7 +1,7 @@
 ﻿@model PhotoItemViewModel
 
 <form asp-action="AddPhoto" method="post" enctype="multipart/form-data">
-    <label asp-for="Title"><strong>Add new photo:</strong></label><br />
+    <label asp-for="Title"><strong>Add new photo:</strong></label><br />  @* Move strong to css *@
     <input asp-for="PhotoFile" /> <br />
     <input asp-for="Title" value="Your photo title" /><br />
     <input asp-for="Description" value="Your photo description" /><br />
