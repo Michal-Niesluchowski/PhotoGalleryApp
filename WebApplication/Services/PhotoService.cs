@@ -14,11 +14,11 @@ namespace WebApplication.Services
 
         HttpClient httpClient = new HttpClient();
 
-        public async Task<Guid> AddPhotoAsync(PhotoItemViewModel photo)
+        public async Task<Guid> AddPhotoAsync(PhotoItemViewModel photo, string ownerId)
         {
             PhotoWebApiClient apiClient = new PhotoWebApiClient(url, httpClient);
 
-            photo.OwnerId = "MN"; //improve when implementing authentication
+            photo.OwnerId = ownerId;
 
             //Convert iformfile to file parameter and sent http post to api
             Guid result;
@@ -34,10 +34,8 @@ namespace WebApplication.Services
             return result;
         }
 
-        public async Task<PhotoItemViewModel[]> GetPhotosAsync()
+        public async Task<PhotoItemViewModel[]> GetPhotosAsync(string ownerId)
         {
-            string ownerId = "MN"; //improve when implementing authentication
-
             PhotoWebApiClient apiClient = new PhotoWebApiClient(url, httpClient);
 
             IEnumerable<PhotoItemDto> photosDto = await apiClient.PhotoAllAsync(ownerId);

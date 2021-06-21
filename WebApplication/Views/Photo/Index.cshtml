@@ -9,12 +9,18 @@
 <h2 class="text-center">@ViewData["Title"]</h2>
 <br />
 
-
-@foreach (var photo in Model.Photos)
+@if (Model.Photos.Count() == 0)
 {
-    <a href='@Url.Action("Index", "PhotoDetails", photo)'>
-        <img src="@photo.UrlToThumbnail" class="img-thumbnail"/>
-    </a>
+    <h4 class="text-center">Your gallery is empty.</h4>
+}
+else
+{
+    @foreach (var photo in Model.Photos)
+    {
+        <a href='@Url.Action("Index", "PhotoDetails", photo)'>
+            <img src="@photo.UrlToThumbnail" class="img-thumbnail" />
+        </a>
+    }
 }
 
 <br />
