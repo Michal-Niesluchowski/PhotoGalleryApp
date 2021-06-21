@@ -1,7 +1,7 @@
 ﻿@model PhotoGalleryViewModel
 
 @{
-    ViewData["Title"] = "My photo gallery";
+    ViewData["Title"] = "My photo gallery"; 
 }
 
 <h2 class="text-center">@ViewData["Title"]</h2>
@@ -11,11 +11,11 @@
     To add new photo please scroll to the bottom to find easy-to-use form.
     Enjoy!
 </h6>
-<br />  
+<br />
 
 @if (Model.Photos.Count() == 0)
 {
-    @* Display empty gallery with no photo *@
+    @* Display empty gallery with no photos *@
     <h4 class="text-center">Your gallery is empty.</h4>
 }
 else
@@ -36,7 +36,7 @@ else
                     @foreach (var photo in Model.Photos)
                     {
                         <a href='@Url.Action("Index", "PhotoDetails", photo)'>
-                            <img src="@photo.UrlToThumbnail" class="img-thumbnail" />
+                            <img src="@photo.UrlToThumbnail" class="img-thumbnail" alt="@photo.Title"/>
                         </a>
                     }
                 </div>
@@ -45,10 +45,10 @@ else
     </div>
 
     @* Other groups of photos - dynamic, one group for one tag*@
+
     @foreach (string tag in Model.GetAllUniqueTags())
     {
         string whiteTag = tag.Replace(" ", ""); //tag used as id in boostrap cannot include spaces
-
         <div id="accordion-@whiteTag">
             <div class="card">
                 <div class="card-header" id="heading-@whiteTag">
@@ -64,7 +64,7 @@ else
                         @foreach (var photo in Model.Photos.Where(photo => photo.Tags.Contains(tag)).Select(photo => photo))
                         {
                             <a href='@Url.Action("Index", "PhotoDetails", photo)'>
-                                <img src="@photo.UrlToThumbnail" class="img-thumbnail" />
+                                <img src="@photo.UrlToThumbnail" class="img-thumbnail" alt="@photo.Title"/>
                             </a>
                         }
                     </div>
@@ -72,7 +72,6 @@ else
             </div>
         </div>
     }
-    
 }
 
 @* Display form to add new photo to gallery *@

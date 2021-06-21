@@ -1,11 +1,18 @@
-﻿using System.Collections.Generic;
+﻿using Microsoft.AspNetCore.Mvc;
+using System;
+using System.Collections.Generic;
+using System.Diagnostics;
 using System.Linq;
+using System.Net;
+using System.Net.Http;
 using System.Threading.Tasks;
 
 namespace WebApplication.Models
 {
     public class PhotoGalleryViewModel
     {
+        private readonly int _azureWaitingTime = 3000; //Waiting time for Azure to create thumbnail
+
         public PhotoItemViewModel[] Photos { get; set; }
 
         public PhotoGalleryViewModel()
@@ -35,5 +42,6 @@ namespace WebApplication.Models
 
             return uniqueTags.ToArray();
         }
+
     }
 }

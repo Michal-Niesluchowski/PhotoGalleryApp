@@ -4,6 +4,7 @@ using Microsoft.AspNetCore.Mvc;
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Threading;
 using System.Threading.Tasks;
 using WebApplication.Models;
 using WebApplication.Services;
@@ -52,7 +53,7 @@ namespace WebApplication.Controllers
 
             Guid guid = await _photoService.AddPhotoAsync(newPhoto, currentUser.Id);
 
-            System.Threading.Thread.Sleep(1000); //:( need to wait for Azure function to create thumbnail
+            Thread.Sleep(2000); //:( need to wait for Azure to create thumbnail
 
             return RedirectToAction("Index");
         }
