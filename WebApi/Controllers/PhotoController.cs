@@ -19,42 +19,39 @@ namespace WebApi.Controllers
     {
         private DatabaseContext _dbContext;
         private IConfiguration _configuration;
+        private BlobHandler _blobHandler;
 
         public PhotoController(DatabaseContext dbContext, IConfiguration configuration)
         {
-            this._dbContext = dbContext;
-            this._configuration = configuration;
+            _dbContext = dbContext;
+            _configuration = configuration;
+            _blobHandler = new BlobHandler(_configuration);
         }
 
         [HttpGet("{ownerId}")]
         public ActionResult<IEnumerable<PhotoItemDto>> Get(string ownerId)
         {
-            //Prepare blob handler
-            BlobHandler blobHandler = new BlobHandler(_configuration);
-
-            //Get photos from database and blobs
-            return _dbContext.PhotoEntities.Where(item => item.OwnerId == ownerId).Select(e => new PhotoItemDto
+            return _dbContext.PhotoEntities.Where(photo => photo.OwnerId == ownerId).Select(p => new PhotoItemDto
             {
-                Id = e.Id,
-                Title = e.Title,
-                Description = e.Description,
-                Tags = e.Tags,
-                FileExtension = e.FileExtension,
-                OwnerId = e.OwnerId,
-                UrlToImage = blobHandler.GetUrlToImage(e.Id, e.FileExtension),
-                UrlToThumbnail = blobHandler.GetUrlToThumbnail(e.Id, e.FileExtension)
+                Id = p.Id,
+                Title = p.Title,
+                Description = p.Description,
+                Tags = p.Tags,
+                FileExtension = p.FileExtension,
+                OwnerId = p.OwnerId,
+                UrlToImage = _blobHandler.GetUrlToImage(p.Id, p.FileExtension),
+                UrlToThumbnail = _blobHandler.GetUrlToThumbnail(p.Id, p.FileExtension)
             }).ToList();
         }
 
         [HttpPost]
         public ActionResult<Guid> Post([FromForm] PhotoItemDto photo)
         {
-            //Add image to blob
+            //Save image in blob
             Guid id = Guid.NewGuid();
-            BlobHandler blobHandler = new BlobHandler(_configuration);
-            blobHandler.SavePhoto(id, photo.PhotoFile);
+            _blobHandler.SavePhoto(id, photo.PhotoFile);
 
-            //Create new photo entity
+            //Create new photo entity for db
             PhotoEntity newPhoto = new PhotoEntity
             {
                 Id = id,

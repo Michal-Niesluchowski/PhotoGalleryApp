@@ -4,11 +4,11 @@ using System.Threading.Tasks;
 
 namespace WebApplication.Models
 {
-    public class PhotoViewModel
+    public class PhotoGalleryViewModel
     {
         public PhotoItemViewModel[] Photos { get; set; }
 
-        public PhotoViewModel()
+        public PhotoGalleryViewModel()
         {
             Photos = new PhotoItemViewModel[0];
         }

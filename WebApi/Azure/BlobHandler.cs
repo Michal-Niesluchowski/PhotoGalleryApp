@@ -43,11 +43,11 @@ namespace WebApi.Azure
             BlobClient blobClient = blobContainerClient.GetBlobClient(blobPath);
 
             //Save photo in blob
-            using (var ms = new MemoryStream())
+            using (var memoryStream = new MemoryStream())
             {
-                photoFile.CopyTo(ms);
-                ms.Position = 0;
-                blobClient.Upload(ms);
+                photoFile.CopyTo(memoryStream);
+                memoryStream.Position = 0;
+                blobClient.Upload(memoryStream);
             }
         }
 

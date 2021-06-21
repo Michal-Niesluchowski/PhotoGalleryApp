@@ -10,12 +10,12 @@ using WebApplication.Services;
 
 namespace WebApplication.Controllers
 {
-    public class PhotoController : Controller
+    public class PhotoGalleryController : Controller
     {
         private readonly IPhotoService _photoService;
         private readonly UserManager<AppUser> _userManager;
 
-        public PhotoController(IPhotoService photoService, UserManager<AppUser> userManager)
+        public PhotoGalleryController(IPhotoService photoService, UserManager<AppUser> userManager)
         {
             _photoService = photoService;
             _userManager = userManager;
@@ -32,7 +32,7 @@ namespace WebApplication.Controllers
 
             var photos = await _photoService.GetPhotosAsync(currentUser.Id);
 
-            var model = new PhotoViewModel
+            var model = new PhotoGalleryViewModel
             {
                 Photos = photos
             };

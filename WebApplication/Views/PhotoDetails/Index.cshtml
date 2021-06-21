@@ -4,10 +4,12 @@
     ViewData["Title"] = "Photo details";
 }
 
-<h2>@Model.Title</h2>
-<label><strong>Description: &nbsp</strong></label>@Model.Description <br />
-<label><strong>Tags: &nbsp </strong></label>@Model.Tags <br />
-<img src="@Model.UrlToImage" />
+<h2 class="text-center">@ViewData["Title"]</h2>
+
+<label class="text-secondary">Title: &nbsp</label>@Model.Title <br />
+<label class="text-secondary">Description: &nbsp</label>@Model.Description <br />
+<label class="text-secondary">Tags: &nbsp</label>@Model.Tags <br />
+<img class="img-fluid" src="@Model.UrlToImage" />
 
 
 

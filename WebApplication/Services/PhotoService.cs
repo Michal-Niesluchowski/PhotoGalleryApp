@@ -1,4 +1,5 @@
-﻿using System;
+﻿using Microsoft.Extensions.Configuration;
+using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
@@ -10,25 +11,37 @@ namespace WebApplication.Services
 {
     public class PhotoService : IPhotoService
     {
-        private string url = "http://localhost:63718/";
-
+        private IConfiguration _configuration;
+        private string _apiUrl;
         HttpClient httpClient = new HttpClient();
+
+        public PhotoService(IConfiguration configuration)
+        {
+            _configuration = configuration;
+            _apiUrl = _configuration.GetConnectionString("ApiUrl");
+        }
 
         public async Task<Guid> AddPhotoAsync(PhotoItemViewModel photo, string ownerId)
         {
-            PhotoWebApiClient apiClient = new PhotoWebApiClient(url, httpClient);
-
+            //Initialize
+            PhotoWebApiClient apiClient = new PhotoWebApiClient(_apiUrl, httpClient);
+            Guid result;
             photo.OwnerId = ownerId;
 
-            //Convert iformfile to file parameter and sent http post to api
-            Guid result;
-            using (var ms = new MemoryStream())
+            //Assign nulls to get ready for http transfer
+            photo.FileExtension = "";
+            photo.UrlToImage = "";
+            photo.UrlToThumbnail = "";
+
+            //Convert PhotoFile type from IFormFile to to get ready for http transfer
+            //And send to api
+            using (var memoryStream = new MemoryStream())
             {
-                photo.PhotoFile.CopyTo(ms);
-                ms.Seek(0, SeekOrigin.Begin);
-                FileParameter fileParameterPhoto = new FileParameter(ms, photo.PhotoFile.FileName, "image/jpeg");
+                photo.PhotoFile.CopyTo(memoryStream);
+                memoryStream.Seek(0, SeekOrigin.Begin);
+                FileParameter fileParameterPhoto = new FileParameter(memoryStream, photo.PhotoFile.FileName, "image/jpeg");
                 result = await apiClient.PhotoAsync(photo.Id, photo.Title, photo.Description, photo.Tags,
-                photo.OwnerId, "", "", "", fileParameterPhoto);
+                photo.OwnerId, photo.FileExtension, photo.UrlToImage, photo.UrlToThumbnail, fileParameterPhoto);
             }
 
             return result;
@@ -36,7 +49,7 @@ namespace WebApplication.Services
 
         public async Task<PhotoItemViewModel[]> GetPhotosAsync(string ownerId)
         {
-            PhotoWebApiClient apiClient = new PhotoWebApiClient(url, httpClient);
+            PhotoWebApiClient apiClient = new PhotoWebApiClient(_apiUrl, httpClient);
 
             IEnumerable<PhotoItemDto> photosDto = await apiClient.PhotoAllAsync(ownerId);
 
