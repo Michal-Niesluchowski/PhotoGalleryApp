@@ -1,6 +1,4 @@
-﻿@*Bootstrap v4.3.1 (https://getbootstrap.com/)*@
-
-@model PhotoGalleryViewModel
+﻿@model PhotoGalleryViewModel
 
 @{
     ViewData["Title"] = "My photo gallery";
@@ -8,24 +6,78 @@
 
 <h2 class="text-center">@ViewData["Title"]</h2>
 <br />
+<h6 class="text-center">
+    Your photos are grouped into sections by tags. For your convenience.
+    To add new photo please scroll to the bottom to find easy-to-use form.
+    Enjoy!
+</h6>
+<br />  
 
 @if (Model.Photos.Count() == 0)
 {
+    @* Display empty gallery with no photo *@
     <h4 class="text-center">Your gallery is empty.</h4>
 }
 else
 {
-    @foreach (var photo in Model.Photos)
+    @* First group of photos - static, all photos *@
+    <div id="accordion">
+        <div class="card">
+            <div class="card-header" id="headingOne">
+                <h5 class="mb-0">
+                    <button class="btn btn-link text-secondary" data-toggle="collapse" data-target="#collapseAll" aria-controls="collapseAll">
+                        All your photos
+                    </button>
+                </h5>
+            </div>
+
+            <div id="collapseAll" class="collapse show" data-parent="#accordion">
+                <div class="card-body">
+                    @foreach (var photo in Model.Photos)
+                    {
+                        <a href='@Url.Action("Index", "PhotoDetails", photo)'>
+                            <img src="@photo.UrlToThumbnail" class="img-thumbnail" />
+                        </a>
+                    }
+                </div>
+            </div>
+        </div>
+    </div>
+
+    @* Other groups of photos - dynamic, one group for one tag*@
+    @foreach (string tag in Model.GetAllUniqueTags())
     {
-        <a href='@Url.Action("Index", "PhotoDetails", photo)'>
-            <img src="@photo.UrlToThumbnail" class="img-thumbnail" />
-        </a>
+        string whiteTag = tag.Replace(" ", ""); //tag used as id in boostrap cannot include spaces
+
+        <div id="accordion-@whiteTag">
+            <div class="card">
+                <div class="card-header" id="heading-@whiteTag">
+                    <h5 class="mb-0">
+                        <button class="btn btn-link text-secondary" data-toggle="collapse" data-target="#collapse-@whiteTag" aria-controls="collapse-@whiteTag">
+                            @tag
+                        </button>
+                    </h5>
+                </div>
+
+                <div id="collapse-@whiteTag" class="collapse" data-parent="#accordion-@whiteTag">
+                    <div class="card-body">
+                        @foreach (var photo in Model.Photos.Where(photo => photo.Tags.Contains(tag)).Select(photo => photo))
+                        {
+                            <a href='@Url.Action("Index", "PhotoDetails", photo)'>
+                                <img src="@photo.UrlToThumbnail" class="img-thumbnail" />
+                            </a>
+                        }
+                    </div>
+                </div>
+            </div>
+        </div>
     }
+    
 }
 
+@* Display form to add new photo to gallery *@
 <br />
 <br />
-
 <div class="panel-footer add-photo-form">
     @await Html.PartialAsync("_AddPhotoPartial", new PhotoItemViewModel())
 </div>

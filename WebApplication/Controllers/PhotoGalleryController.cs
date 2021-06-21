@@ -52,6 +52,8 @@ namespace WebApplication.Controllers
 
             Guid guid = await _photoService.AddPhotoAsync(newPhoto, currentUser.Id);
 
+            System.Threading.Thread.Sleep(1000); //:( need to wait for Azure function to create thumbnail
+
             return RedirectToAction("Index");
         }
     }
